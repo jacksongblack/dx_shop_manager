@@ -1,6 +1,7 @@
 # encoding:utf-8
-#!/usr/bin/env python
+# !/usr/bin/env python
 from dx_shop_manager import settings
+
 try:
     from PIL import Image, ImageEnhance
 except:
@@ -8,8 +9,10 @@ except:
 from StringIO import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
+
 class Images(object):
-    def __init__(self, image, size_dict=settings.IMAGE_SIZE, image_root_path="".join((settings.BASE_DIR,settings.IMAGE_ROOT_PATH)),
+    def __init__(self, image, size_dict=settings.IMAGE_SIZE,
+                 image_root_path="".join((settings.BASE_DIR, settings.IMAGE_ROOT_PATH)),
                  mark_path=settings.IMAGE_MARK_FILE):
         '''
         初始化程序
@@ -45,33 +48,35 @@ class Images(object):
             self.__img_dict[index] = file
         return self
 
-    def save(self, fileType=None):
+
+    def save(self, fileType="waterMark", methon="to_disk"):
         '''
         保存图片到配置位置
         :return:返回地址的hash
         '''
-        self.__mkdir()
+        return {"to_disk": self.__save_to_disk, "to_memory": self.__save_to_memory}[methon](fileType)
+
+    def __save_to_file(self, index):
+        self.__mkdir(index)
+        path = ''.join((self.__root_dir, "/", str(index) + "/", self.filename))
+        self.__img_dict[index].save(path, self.__img_format, quality=100)
+        return ''.join((settings.IMAGE_ROOT_PATH, "/", str(index) + "/", self.filename))
+
+    def __save_to_disk(self, fileType):
+
         path_dict = {}
         if fileType == None or fileType not in self.__img_dict:
             for index in self.__img_dict:
-                path = self.__save_to_disk(index)
+                path = self.__save_to_file(index)
                 path_dict[index] = path
         else:
-            path_dict[fileType] = self.__save_to_disk(fileType)
-
+            path_dict[fileType] = self.__save_to_file(fileType)
         return path_dict
 
-    def __save_to_disk(self, index):
-
-        path = ''.join((self.__root_dir, "/", str(index) + "/", self.filename))
-        self.__img_dict[index].save(path, self.__img_format, quality=100)
-        return ''.join((settings.IMAGE_ROOT_PATH,"/", str(index) + "/", self.filename))
-
-    def save_to_memory(self):
+    def __save_to_memory(self, index):
         buffer = StringIO()
-        self.image.save(buffer, self.__img_format, quality=100)
-        self.image = InMemoryUploadedFile(buffer, None, self.filename, self.__img_format, buffer.len, None)
-        return self
+        self.__img_dict[index].save(buffer, self.__img_format, quality=100)
+        return InMemoryUploadedFile(buffer, None, self.filename, self.__img_format, buffer.len, None)
 
     def waterMark(self, opacity=1, layout="RIGHT_BOTTOM"):
         '''
@@ -101,13 +106,12 @@ class Images(object):
         return mark
 
 
-    def __mkdir(self):
+    def __mkdir(self,index):
         import os
 
         os.mkdir(self.__root_dir)
-        for index in self.__img_dict:
-            path = (self.__root_dir, '/', str(index))
-            os.mkdir(''.join(path))
+        path = (self.__root_dir, '/', str(index))
+        os.mkdir(''.join(path))
 
 
     def __mark_layout(self, layout):

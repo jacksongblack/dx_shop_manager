@@ -73,6 +73,14 @@ def CheckFileSize(filesize, SizeLimit):
 
 
 # 处理上传图片、文件、视频文件
+def save_to_disk(buf, savePath):
+    f = codecs.open(savePath, "wb")
+    for chunk in buf.chunks():
+        f.write(chunk)
+    f.flush()
+    f.close()
+
+
 @csrf_exempt
 def uploadFile(request, config):
     result = JsonResult()
@@ -93,11 +101,7 @@ def uploadFile(request, config):
             truelyName = buildFileName(filename)
             webUrl = config.SavePath + truelyName
             savePath = settings.UPLOAD_ROOT + webUrl
-            f = codecs.open(savePath, "wb")
-            for chunk in buf.chunks():
-                f.write(chunk)
-            f.flush()
-            f.close()
+            if not os.path.isfile(savePath): save_to_disk(buf, savePath)
             result.state = "SUCCESS"
             result.url = truelyName
             result.title = truelyName
@@ -111,7 +115,7 @@ def uploadFile(request, config):
 
 
 # 处理在线图片与在线文件
-#返回的数据格式：{"state":"SUCCESS","list":[{"url":"upload/image/20140627/6353948647502438222009315.png"},{"url":"upload/image/20140627/6353948659383617789875352.png"},{"url":"upload/image/20140701/6353980733328090063690725.png"},{"url":"upload/image/20140701/6353980745691597223366891.png"},{"url":"upload/image/20140701/6353980747586705613811538.png"},{"url":"upload/image/20140701/6353980823509548151892908.png"}],"start":0,"size":20,"total":6}
+# 返回的数据格式：{"state":"SUCCESS","list":[{"url":"upload/image/20140627/6353948647502438222009315.png"},{"url":"upload/image/20140627/6353948659383617789875352.png"},{"url":"upload/image/20140701/6353980733328090063690725.png"},{"url":"upload/image/20140701/6353980745691597223366891.png"},{"url":"upload/image/20140701/6353980747586705613811538.png"},{"url":"upload/image/20140701/6353980823509548151892908.png"}],"start":0,"size":20,"total":6}
 def listFileManage(request, imageManagerListPath, imageManagerAllowFiles, listsize):
     pstart = request.GET.get("start")
     start = pstart == None and int(pstart) or 0
@@ -151,7 +155,7 @@ def uploadimageHandler(request):
     SavePath = GetConfigValue("imageUrlPrefix")
     upconfig = UploadConfig(PathFormat, UploadFieldName, SizeLimit, AllowExtensions, SavePath, False, '')
     for index in request.FILES:
-        request.FILES[index] = Images(request.FILES[index]).waterMark().save_to_memory().image
+        request.FILES[index] = Images(request.FILES[index]).waterMark().save(methon="to_memory")
     return uploadFile(request, upconfig)
 
 

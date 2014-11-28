@@ -86,11 +86,10 @@ class ProductController(View):
 
 
     def create(self, request):
-
         if request.method == "GET":
-            return HttpResponse(create_template.render(RequestContext(request, {"url": "/product/update"})))
+            return HttpResponse(create_template.render(RequestContext(request, {"url": "/product/create/"})))
         elif request.method == "POST":
-
+            print(request)
             for index in request.FILES:
-                Images(request.FILES[index]).waterMark().resize().save()
+                Images(request.FILES[index]).waterMark().save()
         return HttpResponseRedirect("/product/index")
