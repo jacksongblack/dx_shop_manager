@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 import random
 from datetime import *
 from dx_shop_manager import settings
-from image.image import Images
+from plugin.image import Images
 
 
 # 本地上传图片时构造json返回值

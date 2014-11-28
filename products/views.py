@@ -5,7 +5,7 @@ from django.template.context import RequestContext
 from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from products.models import Goods
-from  image.image import Images
+from  plugin.image import Images
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
