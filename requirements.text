@@ -1,0 +1,11 @@
+#项目依赖库
+--index-url http://pypi.python.org/simple
+
+django==1.6.5
+django-redis-cache==0.13.0
+djangorestframework==2.3.14
+django-redis-sessions==0.4.0
+mysql-python==1.2.5
+pillow==2.6.1
+django-simple-captcha==0.4.3
+six==1.8.0

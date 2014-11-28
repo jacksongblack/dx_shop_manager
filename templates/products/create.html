@@ -1,0 +1,31 @@
+{% extends 'products/public/base.html' %}
+{% block title %}馨然之家健康平台|后台管理系统{% endblock %}
+{% block static %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}UE/third-party/SyntaxHighlighter/shCoreDefault.css">
+    <script type="text/javascript" src="{{ STATIC_URL }}UE/third-party/SyntaxHighlighter/shCore.js"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/ueditor.all.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/lang/zh-cn/zh-cn.js"></script>
+{% endblock %}
+{% block centent %}
+    <form enctype="multipart/form-data" method="post" action="/product/create/" role="form" style="margin: 50px auto">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="">图片</label>
+            <input type="file" name="image" required="required"/>
+        </div>
+
+        <div class="form-group">
+            <label for="">请编辑</label>
+            <script id="editor" type="text/plain" style="width:auto;height:500px;"></script>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" name="prive" required="required"/>
+        </div>
+    </form>
+    <script type="text/javascript">
+        var ue = UE.getEditor('editor');
+        SyntaxHighlighter.all();
+    </script>
+{% endblock %}

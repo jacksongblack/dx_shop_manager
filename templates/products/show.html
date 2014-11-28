@@ -1,0 +1,54 @@
+{% extends 'public/base.html' %}
+{% block title %}馨然之家健康平台|后台管理系统{% endblock %}
+{% block static %}
+{% endblock %}
+{% block centent %}
+<div class="row">
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">名称:</span><small>{{ product.goods_name }}</small></h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">种类:</span><small>{{ product.gc_name }}</small></h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">内部价格:</span><small>{{ product.goods_price }}</small></h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">店面价格:</span><small>{{ product.goods_store_price }}</small></h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">编号:</span><small>{{ product.goods_store_price }}</small></h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">编号:</span><small>{{ product.goods_store_price }}</small></h3>
+    <div class="row col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12">
+            <h3>产品图片:</h3>
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <img src="{{ product.goods_image1 |safe}}" alt="产品图片" class="img-rounded">
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <img src="{{ product.goods_image2 |safe}}" alt="产品图片" class="img-rounded">
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <img src="{{ product.goods_image3 |safe}}" alt="产品图片" class="img-rounded">
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <img src="{{ product.goods_image4 |safe}}" alt="产品图片" class="img-rounded">
+        </div>
+        <div class="col-sm-2 col-md-2">
+            <img src="{{ product.goods_image5 |safe}}" alt="产品图片" class="img-rounded">
+        </div>
+    </div>
+    <div class="row col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12">
+            <h3>产品说明:</h3> 
+        </div>    
+        <div class="col-sm-12 col-md-12">
+            {{ product.goods_body |safe}}
+        </div>    
+    </div>    
+</div>
+<div class="row">
+    <br/>
+    <br/>
+    <br/>
+    <div class="col-sm-3 col-md-3">
+        <a href="/product/update/{{product.id}}" class="btn btn-danger icon-pencil" >修改</a>
+    </div>    
+    <div class="col-sm-6 col-md-6">
+        <a href="/product/index" class="btn btn-success icon-home" >返回</a>
+    </div>    
+
+</div>
+{% endblock %}
