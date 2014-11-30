@@ -33,17 +33,16 @@ class ProductTools(object):
         keys = (
         "goods_store_price", "goods_show", "gc_id", "goods_name", "goods_body", "goods_price", "goods_story_price",
         "goods_body")
-        file_dict = {}
         params_dict = {}
         try:
             for image_index in image_key:
-                file_dict[image_index] = Images(request.FILES[image_index]).waterMark().save()["waterMark"]
+                params_dict[image_index] = Images(request.FILES[image_index]).waterMark().save()["waterMark"]
 
             for key in keys:
                 params_dict[key] = request.POST[key]
         except:
             pass
-        return dict(file_dict.items() + params_dict.items())
+        return params_dict
 
 
 class ProductController(View):

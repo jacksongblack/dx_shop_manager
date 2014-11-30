@@ -37,6 +37,8 @@ def login(request):
                 data[contenttype.ERROR]="username or password error!"
     return render_to_response('user/login.html',data, RequestContext(request))
 
+def create(request):
+    pass
 class Userdetail(DetailView):
     '''
     用户信息
