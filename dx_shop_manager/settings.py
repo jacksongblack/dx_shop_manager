@@ -221,3 +221,6 @@ IMAGE_SIZE = {
         "height":"100"
     }
 }
+SOUTH_MIGRATION_MODULES = {
+    'captcha': 'captcha.south_migrations',
+}
