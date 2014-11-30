@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 class GoodsClass(models.Model):
     gc_name = models.CharField(max_length=100)
-    gc_parant_id = models.CharField(max_length=32)
+    gc_parent_id = models.CharField(max_length=32)
     gc_sort = models.IntegerField()
     gc_show = models.SmallIntegerField()
     gc_index_show = models.SmallIntegerField()
@@ -12,56 +12,6 @@ class GoodsClass(models.Model):
 
     class Meta:
         db_table = "goods_class"
-
-
-class Goods(models.Model):
-    goods_name = models.CharField(max_length=50)
-    gc = models.ForeignKey(GoodsClass)
-    gc_name = models.CharField(max_length=100)
-    goods_image1 = models.CharField(max_length=200)
-    goods_image2 = models.CharField(max_length=200)
-    goods_image3 = models.CharField(max_length=200)
-    goods_image4 = models.CharField(max_length=200)
-    goods_image5 = models.CharField(max_length=200)
-    goods_image7 = models.CharField(max_length=200)
-    goods_video = models.CharField(max_length=200)
-    goods_tag = models.CharField(max_length=100)
-    goods_price = models.DecimalField(max_digits=10, decimal_places=2)
-    goods_store_price = models.DecimalField(max_digits=10, decimal_places=2)
-    goods_serial = models.CharField(max_length=50)
-    goods_show = models.SmallIntegerField(max_length=6)
-    goods_click = models.IntegerField(max_length=11)
-    goods_state = models.SmallIntegerField(max_length=6)
-    goods_commend = models.SmallIntegerField(max_length=6)
-    goods_add_time = models.DateTimeField()
-    goods_keywords = models.CharField(max_length=255)
-    goods_description = models.CharField(max_length=255)
-    goods_body = models.TextField()
-    goods_close_reason = models.CharField(max_length=255)
-    goods_store_state = models.SmallIntegerField(6)
-    commentnum = models.IntegerField(max_length=11)
-    salenum = models.IntegerField(max_length=11)
-    spec_goods_color = models.CharField(max_length=300)
-    spec_name = models.CharField(max_length=300)
-
-    class Meta:
-        db_table = "goods"
-
-    def get_stock_number(self):
-        num = 0
-        for storage in self.storage_set.all():
-            num += int(storage.storage_num)
-        return num
-    def get_sale_number(self):
-        num = 0
-        for storage in self.storage_set.all():
-            num += int(storage.sale_num)
-        return num
-    def __string_to_dict(self):
-        pass
-
-    def __dict_to_string(self):
-        pass
 
 
 class Warehouse(models.Model):
@@ -87,7 +37,7 @@ class Warehouse(models.Model):
 
 class GoodsStorage(models.Model):
     warehouse = models.ForeignKey(Warehouse)
-    goods = models.ForeignKey(Goods, related_name="storage_set")
+    goods = models.ForeignKey("Goods", related_name="storage_set")
     storage_num = models.IntegerField(max_length=11)
     sale_num = models.IntegerField(max_length=11)
     storage_lock = models.IntegerField(max_length=11)
@@ -97,3 +47,64 @@ class GoodsStorage(models.Model):
 
     class Meta:
         db_table = "goods_storage"
+
+
+class Goods(models.Model):
+    goods_name = models.CharField(max_length=50)
+    gc = models.ForeignKey(GoodsClass)
+    gc_name = models.CharField(max_length=100)
+    goods_image1 = models.CharField(max_length=200, null=True, blank=True)
+    goods_image2 = models.CharField(max_length=200, null=True, blank=True)
+    goods_image3 = models.CharField(max_length=200, null=True, blank=True)
+    goods_image4 = models.CharField(max_length=200, null=True, blank=True)
+    goods_image5 = models.CharField(max_length=200, null=True, blank=True)
+    goods_image7 = models.CharField(max_length=200, blank=True)
+    goods_video = models.CharField(max_length=200, blank=True)
+    goods_tag = models.CharField(max_length=100, blank=True)
+    goods_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    goods_store_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    goods_serial = models.CharField(default=0, max_length=50, blank=True)
+    goods_show = models.SmallIntegerField(default=1, max_length=6)
+    goods_click = models.IntegerField(default=1, max_length=11, blank=True, null=True)
+    goods_state = models.SmallIntegerField(default=1, max_length=6, null=False)
+    goods_commend = models.SmallIntegerField(default=1, max_length=6, null=False)
+    goods_add_time = models.DateTimeField(null=False)
+    goods_keywords = models.CharField(max_length=255, null=True)
+    goods_description = models.CharField(max_length=255, null=True)
+    goods_body = models.TextField(null=True)
+    goods_close_reason = models.CharField(max_length=255, null=True)
+    goods_store_state = models.SmallIntegerField(6, null=True)
+    commentnum = models.IntegerField(default=1, max_length=11, null=True)
+    salenum = models.IntegerField(default=1, max_length=11, null=True)
+    spec_goods_color = models.CharField(max_length=300, null=True)
+    spec_name = models.CharField(max_length=300, null=True)
+
+    class Meta:
+        db_table = "goods"
+
+    def get_stock_number(self):
+        num = 0
+        for storage in self.storage_set.all():
+            num += int(storage.storage_num)
+        return num
+
+    def get_sale_number(self):
+        num = 0
+        for storage in self.storage_set.all():
+            num += int(storage.sale_num)
+        return num
+
+    def update_object(self, **params):
+        for index in params:
+            setattr(self, index, params[index])
+        return self
+
+    def save(self, *args, **kwargs):
+        import datetime
+        if not self.id:
+            self.goods_add_time = datetime.datetime.today()
+        return super(Goods, self).save(*args, **kwargs)
+
+
+
+

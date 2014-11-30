@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'users',
     'captcha',
     'django_cron',
+    'south',
+    'products',
 )
 
 MIDDLEWARE_CLASSES = (

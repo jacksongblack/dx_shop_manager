@@ -33,7 +33,8 @@ class Images(object):
         self.__mark = Image.open(mark_path)
         self.filename = str(image)
         self.__size_dict = size_dict
-        self.__root_dir = ''.join((image_root_path, "/", datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")))
+        self.__now_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+        self.__root_dir = ''.join((image_root_path, "/", self.__now_time))
         self.__img_dict = {"original_img": self.image}
 
     def resize(self):
@@ -60,7 +61,7 @@ class Images(object):
         self.__mkdir(index)
         path = ''.join((self.__root_dir, "/", str(index) + "/", self.filename))
         self.__img_dict[index].save(path, self.__img_format, quality=100)
-        return ''.join((settings.IMAGE_ROOT_PATH, "/", str(index) + "/", self.filename))
+        return ''.join((settings.IMAGE_ROOT_PATH, "/", self.__now_time, "/", str(index) + "/", self.filename))
 
     def __save_to_disk(self, fileType):
 
@@ -106,7 +107,7 @@ class Images(object):
         return mark
 
 
-    def __mkdir(self,index):
+    def __mkdir(self, index):
         import os
 
         os.mkdir(self.__root_dir)
