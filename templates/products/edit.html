@@ -24,10 +24,10 @@
         <label for="class">分类</label>
         <select class="form-contol" name="gc_id">
             {% for gc_name in goods_class %}
-            {% ifequal product.gc_name gc %}
+            {% ifequal product.gc_name gc_name.gc_name %}
             <option value="{{ gc_name.id }}" selected>
                 {% else %}
-            <option value="{{ gc_name.id }}" selected>
+            <option value="{{ gc_name.id }}">
                 {% endifequal %}
                 {{gc_name.gc_name}}
             </option>
@@ -94,8 +94,5 @@
             this.setContent('{{ product.goods_body | safe }}');
         }});
         SyntaxHighlighter.all();
-
-
-
 </script>
 {% endblock %}
