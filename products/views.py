@@ -13,7 +13,6 @@ create_template = loader.get_template("products/edit.html")
 index_template = loader.get_template("products/index.html")
 show_template = loader.get_template("products/show.html")
 
-
 class ProductTools(object):
     def query_index(self, query_dict, data):
         '''
@@ -105,6 +104,7 @@ class ProductController(View):
     def create(self, request):
         if request.method == "GET":
             goods_class_objects_all = GoodsClass.objects.all()
+            print(goods_class_objects_all)
             return HttpResponse(create_template.render(
                 RequestContext(request, {"goods_class": goods_class_objects_all, "url": "/product/create/"})))
         elif request.method == "POST":

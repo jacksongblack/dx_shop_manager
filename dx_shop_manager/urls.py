@@ -18,7 +18,7 @@ urlpatterns = patterns('',
                        url(r'^product/', include('products.urls')),
                        url(r'^onlineEdit/', include('onlineEdit.urls')),
                        url(r'ueEditorControler', 'onlineEdit.controller.handler'),
-                       ( r'^upload/(?P<path>.*)$', 'django.views.static.serve',
+                       url( r'^upload/(?P<path>.*)$', 'django.views.static.serve',
                          {'document_root': (settings.BASE_DIR + "/upload").replace('\\', '/')}
                        ),
 )

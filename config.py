@@ -13,13 +13,13 @@ LOG_PATH='log/'
 #数据库引擎
 DB_ENGINE='django.db.backends.mysql'
 #数据库名字
-DB_NAME='dxshop'
+DB_NAME='dxshop_manage'
 #数据库用户
-DB_USER='xruser'
+DB_USER='root'
 #数据库密码
-DB_PASSWORD='devdb'
+DB_PASSWORD='root'
 #数据库地址
-DB_HOST='192.168.1.10'
+DB_HOST='127.0.0.1'
 #数据库端口
 DB_PORT='3306'
 #缓存地址

@@ -38,7 +38,13 @@ def login(request):
     return render_to_response('user/login.html',data, RequestContext(request))
 
 def create(request):
-    pass
+    if request.method=="GET":
+       return  render_to_response("user/edit.html",{"url":"/user/create/"},RequestContext(request))
+    if request.method == "POST":
+        params = request.POST
+        User.create_user(**params)
+        return HttpResponseRedirect("/user/login")
+
 class Userdetail(DetailView):
     '''
     用户信息

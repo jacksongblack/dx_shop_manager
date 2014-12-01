@@ -22,13 +22,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     用户模型，暂时测试用
     '''
     id = models.CharField(max_length=32, unique=True, primary_key=True, default=None, editable=False)
-    username = models.CharField(_('username'), max_length=30, unique=True,
+    username = models.CharField(max_length=30, unique=True,
                                 validators=[
                                     validators.RegexValidator(re.compile('^[\w.@+-]+$'), _('Enter a valid username.'),
                                                               'invalid')
                                 ])
-    email = models.EmailField(_('email address'), blank=True, max_length=30)
-    phone = models.CharField(_('phone nums'), blank=True, max_length=11)
+    email = models.EmailField( blank=True, max_length=30)
+    phone = models.CharField( blank=True, max_length=11)
     login_num = models.IntegerField(default=0)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -62,23 +62,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if self.id is None or self.id == 0:
             self.id = uuid()
-        super(User, self).save()
+        super(User, self).save(*args,**kwargs)
 
     @classmethod
-    def create_user(cls, data=None):
-        if not data:
-            return None;
-        try:
-            user = User.objects.create(id=data['id'], username=data['username'])
-            if data.get('email', None) is not None:
-                user.email = data['email']
-            if data.get('phone', None) is not None:
-                user.phone = data['phone']
-            user.save()
+    def create_user(cls, **data):
+        # try:
+
+            keys = ("username","password","email","phone","secure_phone","email")
+            for key in data.keys():
+                if key not in keys:
+                    data.pop(key)
+            print(data)
+            user = User.objects.create(**data)
             return user
-        except BaseException, e:
-            print e
-            return None
+        # except BaseException, e:
+        #     print e
+        #     return None
 
     def get_profile(self):
         """
