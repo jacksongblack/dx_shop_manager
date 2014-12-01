@@ -8,7 +8,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
-from captcha.fields import CaptchaField
+# from captcha.fields import CaptchaField
 
 class UserLoginForm(forms.Form):
     '''
@@ -22,7 +22,7 @@ class UserLoginForm(forms.Form):
     password = forms.CharField(label=_("Password"),
         widget=forms.PasswordInput, error_messages={
             'required':_("Password can not be null")})
-    captcha = CaptchaField()
+    # captcha = CaptchaField()
 
 class UserAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):

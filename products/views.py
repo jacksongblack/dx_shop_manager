@@ -6,7 +6,10 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from products.models import Goods, GoodsClass
 from plugin.image import Images
+from users.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.decorators import login_required,permission_required
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 create_template = loader.get_template("products/edit.html")
@@ -45,6 +48,8 @@ class ProductTools(object):
 
 
 class ProductController(View):
+    # @method_decorator(login_required(login_url="/user/login/"))
+    # @method_decorator(permission_required("product.goods.show",login_url="/user/login"))
     def index(self, request):
         if request.method == "GET":
             data = Goods.objects.all()

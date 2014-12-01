@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 
 """
 Django settings for dx_bdos project.
@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT,\
+from config import DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, \
     CACHES_LOCATION, CACHES_DB, CACHES_PASSWORD, LOG_PATH, DB_ENGINE
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -40,7 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'users',
-    'captcha',
+    # 'captcha',
     'django_cron',
     'south',
     'products',
@@ -66,21 +67,21 @@ DATABASE_ROUTERS = ['dx_shop_manager.router.DBRouter']
 
 DATABASES = {
     'default': {
-        'ENGINE': DB_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': DB_NAME,                      # Or path to database file if using sqlite3.
+        'ENGINE': DB_ENGINE,  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': DB_NAME,  # Or path to database file if using sqlite3.
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': DB_PORT,                      # Set to empty string for default.
+        'HOST': DB_HOST,  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': DB_PORT,  # Set to empty string for default.
     },
-#     'db1': {
-#         'ENGINE': DB_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-#         'NAME': DB_NAME,                      # Or path to database file if using sqlite3.
-#         'USER': DB_USER,
-#         'PASSWORD': DB_PASSWORD,
-#         'HOST': DB_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-#         'PORT': DB_PORT,                      # Set to empty string for default.
-#     },
+    #     'db1': {
+    #         'ENGINE': DB_ENGINE, # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+    #         'NAME': DB_NAME,                      # Or path to database file if using sqlite3.
+    #         'USER': DB_USER,
+    #         'PASSWORD': DB_PASSWORD,
+    #         'HOST': DB_HOST,                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+    #         'PORT': DB_PORT,                      # Set to empty string for default.
+    #     },
 }
 #定时器配置
 CRON_CLASSES = [
@@ -109,28 +110,28 @@ AUTHENTICATION_BACKENDS = (
     'core.backends.CheckModelBackend',
 )
 #每个页面应该被缓存的秒数
-CACHE_MIDDLEWARE_SECONDS=15*60
-CACHE_MIDDLEWARE_KEY_PREFIX='xinranzhijia'
+CACHE_MIDDLEWARE_SECONDS = 15 * 60
+CACHE_MIDDLEWARE_KEY_PREFIX = 'xinranzhijia'
 
-STATIC_ROOT = os.path.join(os.path.dirname(__file__),'../static/')
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/')
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    ('css',os.path.join(STATIC_ROOT,'css').replace('\\','/') ),
-    ('js',os.path.join(STATIC_ROOT,'js').replace('\\','/') ),
-    ('images',os.path.join(STATIC_ROOT,'images').replace('\\','/') ),
-    ('font',os.path.join(STATIC_ROOT,'font').replace('\\','/') ),
-    ('UE',os.path.join(STATIC_ROOT,'UE').replace('\\','/') ),
+    ('css', os.path.join(STATIC_ROOT, 'css').replace('\\', '/') ),
+    ('js', os.path.join(STATIC_ROOT, 'js').replace('\\', '/') ),
+    ('images', os.path.join(STATIC_ROOT, 'images').replace('\\', '/') ),
+    ('font', os.path.join(STATIC_ROOT, 'font').replace('\\', '/') ),
+    ('UE', os.path.join(STATIC_ROOT, 'UE').replace('\\', '/') ),
 )
 
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__),'../media/')
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../media/')
 MEDIA_URL = '/media/'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), '../templates'),
 )
-UPLOAD_ROOT = os.path.join(os.path.dirname(__file__),"..")
+UPLOAD_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 #缓存设置使用Redis作为缓存服务器
 CACHES = {
@@ -138,13 +139,13 @@ CACHES = {
         'BACKEND': 'redis_cache.RedisCache',
         'LOCATION': CACHES_LOCATION,
         'OPTIONS': {
-                    'DB': CACHES_DB,
-                    'PASSWORD': CACHES_PASSWORD,
+            'DB': CACHES_DB,
+            'PASSWORD': CACHES_PASSWORD,
         },
     },
 }
 
-PAGINATE_BY=10
+PAGINATE_BY = 10
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -182,18 +183,18 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-            'formatter':'simple',
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
         'user_file_handler': {
-            'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename':LOG_PATH+'bgos_user_log.log',
-            'maxBytes':1024*1024*5,
-            'backupCount':500,
-            'formatter':'verbose',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_PATH + 'bgos_user_log.log',
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 500,
+            'formatter': 'verbose',
         },
     },
     'loggers': {
@@ -202,25 +203,25 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'user.logger':{
-            'handlers': ['console','user_file_handler'],
+        'user.logger': {
+            'handlers': ['console', 'user_file_handler'],
             'level': 'INFO',
             'propagate': False,
         },
     }
 }
 IMAGE_MARK_FILE = BASE_DIR + "/media/image/logo.png"
-IMAGE_ROOT_PATH =  "/upload/images"
+IMAGE_ROOT_PATH = "/upload/images"
 IMAGE_SIZE = {
-    "60x60":{
-        "width":"60",
-        "height":"60"
+    "60x60": {
+        "width": "60",
+        "height": "60"
     },
-    "100x100":{
-        "width":"100",
-        "height":"100"
+    "100x100": {
+        "width": "100",
+        "height": "100"
     }
 }
-SOUTH_MIGRATION_MODULES = {
-    'captcha': 'captcha.south_migrations',
-}
+# SOUTH_MIGRATION_MODULES = {
+#     'captcha': 'captcha.south_migrations',
+# }

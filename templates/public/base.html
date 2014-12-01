@@ -23,9 +23,13 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    {% if user %}
+                    {% if  user.is_authenticated %}
+                    <li><h4 class="success" style="color:white;">欢迎{{  user.get_username }}使用</h4></li>
+                    <li><a href="/user/logout/">退出</a></li>
+                    {% endif %}
+                    {% endif %}
                 </ul>
-                <form class="navbar-form navbar-right">
-                </form>
             </div>
         </div>
         </nav>

@@ -10,7 +10,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
 from django.core import validators
 import re
 from django.utils.translation import ugettext_lazy as _
-from django.utils import timezone
 import warnings
 from django.core.exceptions import ImproperlyConfigured
 from utils.uuid import uuid
@@ -27,13 +26,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                                     validators.RegexValidator(re.compile('^[\w.@+-]+$'), _('Enter a valid username.'),
                                                               'invalid')
                                 ])
-    email = models.EmailField( blank=True, max_length=30)
-    phone = models.CharField( blank=True, max_length=11)
+    email = models.EmailField(blank=True, max_length=30)
+    phone = models.CharField(blank=True, max_length=11)
     login_num = models.IntegerField(default=0)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now())
     modified_date = models.DateTimeField(blank=True, null=True)
+    date_joined = models.DateTimeField(blank=True, null=True)
     user_parent_id = models.CharField(max_length=32, blank=True, null=True)
     secure_phone = models.CharField(max_length=11, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
@@ -62,22 +61,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     def save(self, *args, **kwargs):
         if self.id is None or self.id == 0:
             self.id = uuid()
-        super(User, self).save(*args,**kwargs)
+            super(User, self).save(*args, **kwargs)
 
     @classmethod
     def create_user(cls, **data):
-        # try:
-
-            keys = ("username","password","email","phone","secure_phone","email")
-            for key in data.keys():
-                if key not in keys:
-                    data.pop(key)
-            print(data)
-            user = User.objects.create(**data)
-            return user
-        # except BaseException, e:
-        #     print e
-        #     return None
+        keys = ("username", "password", "email", "phone", "secure_phone", "email")
+        for key in data.keys():
+            if key not in keys:
+                data.pop(key)
+            else:
+                data[key] = data.get(key, "")[0]
+        user = User.objects.create_user(data.pop("username"), str(data.pop("email")), data.pop("password"), **data)
+        return user
 
     def get_profile(self):
         """
@@ -129,5 +124,5 @@ class MToken(Token):
             token = MToken.objects.get(user_id=user.id)
         except:
             token = MToken.objects.create(user_id=user.id, terminal=terminal, version=version)
-        return token
-        
+            return token
+

@@ -1,38 +1,30 @@
 {% load i18n %}
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>登陆</title>
-    <script src="/static/js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/font-awesome.min.css">
+    <script src="{{ STATIC_URL }}js/jquery-1.11.0.min.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<h1>登陆页面：</</h1>
+<h1>登陆页面：</h1>
 {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
-<form method = 'post' enctype="multipart/form-data">
+<form method='post' enctype="multipart/form-data" action="/user/login/">
     {% csrf_token %}
-    {{form.as_p}}
-    <button class='js-captcha-refresh'>刷新</button>
-    <input type="submit" value = "登录" />
+    <div class="from-group">
+        <label for="username">账户</label>
+        <input type="text" id="username" name="username" placeholder="请输入账户">
+    </div>
+    <div class="from-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" placeholder="请输入密码">
+    </div>
+    <input type="submit" value="登录" class="btn btn-success"/>
 </form>
 <br>
 </body>
-<script>
-$(function(){
-	$('.js-captcha-refresh').click(function(){
-		var $form = $(this).parents('form');
-        var url = location.protocol + "//" + window.location.hostname
-                  +":"+ location.port + "/captcha/refresh/";
-        $.getJSON(url, {}, function(json) {
-			alert(json.key+","+json.image_url)
-            $form.find('input[name="captcha_0"]').val(json.key);
-            $form.find('img.captcha').attr('src', json.image_url);
-        });
-
-	    return false;
-	});
-})
-</script>
 </html>
