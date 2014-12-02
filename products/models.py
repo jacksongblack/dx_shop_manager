@@ -4,14 +4,23 @@ from django.db import models
 # Create your models here.
 class GoodsClass(models.Model):
     gc_name = models.CharField(max_length=100)
-    gc_parent_id = models.CharField(max_length=32)
-    gc_sort = models.IntegerField()
-    gc_show = models.SmallIntegerField()
-    gc_index_show = models.SmallIntegerField()
-    gc_parent_path = models.CharField(max_length=200)
+    gc_parent_id = models.CharField(default="nul", max_length=32)
+    gc_sort = models.IntegerField(default=0)
+    gc_show = models.SmallIntegerField(default=0)
+    gc_index_show = models.SmallIntegerField(default=1)
+    gc_parent_path = models.CharField(default="null", max_length=200)
 
     class Meta:
         db_table = "goods_class"
+
+    @classmethod
+    def create(cls, **params):
+        keys = ("gc_name", "gc_parent_id", "gc_sort", "gc_show", "gc_index_show", "gc_parent_path")
+        category = {}
+        for key in keys:
+            if key in params.keys():
+                category[key] = params.get(key)[0]
+        return cls.objects.create(**category)
 
 
 class Warehouse(models.Model):
@@ -47,6 +56,25 @@ class GoodsStorage(models.Model):
 
     class Meta:
         db_table = "goods_storage"
+
+
+def get_params(request):
+    from plugin.image import Images
+
+    image_key = ("goods_image1", "goods_image2", "goods_image3", "goods_image4", "goods_image5")
+    keys = (
+        "goods_store_price", "goods_show", "gc_id", "goods_name", "goods_body", "goods_price", "goods_story_price",
+        "goods_body")
+    params_dict = {}
+    for image_index in image_key:
+        if image_index in request.FILES.keys():
+            params_dict[image_index] = Images(request.FILES[image_index]).waterMark().save()["waterMark"]
+    for key in keys:
+        if key in request.POST.keys():
+            params_dict[key] = request.POST[key]
+
+    print(params_dict)
+    return params_dict
 
 
 class Goods(models.Model):
@@ -94,16 +122,43 @@ class Goods(models.Model):
             num += int(storage.sale_num)
         return num
 
-    def update_object(self, **params):
-        for index in params:
+    def update_object(self, request):
+        params = get_params(request)
+        for index in params.keys():
             setattr(self, index, params[index])
         return self
 
     def save(self, *args, **kwargs):
         import datetime
+
         if not self.id:
             self.goods_add_time = datetime.datetime.today()
         return super(Goods, self).save(*args, **kwargs)
+
+    @classmethod
+    def query_index(cls, query_dict):
+        '''
+        index界面搜索方法,并防止数据库注入
+        param query_dict: 搜索的参数
+        param data: 数据库查询结果
+        '''
+        query_keys = ("id", "gc_name", "goods_name")
+        params = {}
+        for key in query_dict:
+            if key in query_keys and key in query_dict.keys() and len(query_dict[key][0]) != 0:
+                params[key] = query_dict[key][0]
+        if params:
+            data = cls.objects.filter(**params)
+        else:
+            data = cls.objects.all()
+        return data
+
+    @classmethod
+    def form_create(cls, request):
+        params_dict = get_params(request)
+
+        return cls.objects.create(**params_dict)
+
 
 
 

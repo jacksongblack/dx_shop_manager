@@ -4,7 +4,7 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="name">账户:</label>
-            <input type="text" placeholder="请输入用户名" name="username" required="required"/>
+            <input type="text" placeholder="请输入用户名" name="username" value="{{ user.username }}" required="required"/>
         </div>
         <div class="form-group">
             <label for="password">密码:</label>
@@ -16,22 +16,30 @@
         </div>
         <div class="form-group">
             <label for="phone">电话号码</label>
-            <input type="tel" id="phone" pattern=".{11,11}" title="请输入11位手机电话" name="phone" placeholder="请输入手机号码" required="required">
+            <input type="tel" id="phone" pattern=".{11,11}" title="请输入11位手机电话" name="phone" value="{{ user.phone }}" placeholder="请输入手机号码" required="required">
         </div>
         <div class="form-group">
             <label for="secure_phone">备用电话号码</label>
-            <input type="tel" id="secure_phone" name="secure_phone" pattern=".{11,11}" title="请输入11位手机电话" placeholder="请输入手机号码" required="required">
+            <input type="tel" id="secure_phone" name="secure_phone" pattern=".{11,11}" title="请输入11位手机电话" value="{{ user.secure_phone }}" placeholder="请输入手机号码" required="required">
         </div>
          <div class="form-group">
             <label for="sex">性别</label>
-             <select name="sex" id="sex" class="form-contol" required="required">
+             <select name="sex" id="sex" class="form-contol"  required="required">
                 <option value="1">先生</option>
                 <option value="0">女士</option>
              </select>
         </div>
         <div class="form-group">
+           <label for="permision_group">权限组</label>
+             <select name="permision_group" id="sex" class="form-contol" required="required">
+                 {% for permision  in permision_group%}
+                     <option> {{ permision }}</option>
+                 {% endfor %}
+             </select>
+        </div>
+        <div class="form-group">
            <label for="email">邮箱</label>
-            <input type="email" id="email" name="email" placeholder="请输入常用邮箱"required="required">
+            <input type="email" id="email" name="email" value="{{ user.email }}" placeholder="请输入常用邮箱"required="required">
         </div>
         <div class="form-group">
            <input type="submit" value="提交" class="btn btn-success">

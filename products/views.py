@@ -5,10 +5,9 @@ from django.template.context import RequestContext
 from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from products.models import Goods, GoodsClass
-from plugin.image import Images
-from users.models import User
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required,permission_required
+from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 
 # Create your views here.
@@ -16,47 +15,12 @@ create_template = loader.get_template("products/edit.html")
 index_template = loader.get_template("products/index.html")
 show_template = loader.get_template("products/show.html")
 
-class ProductTools(object):
-    def query_index(self, query_dict, data):
-        '''
-        index界面搜索方法,并防止数据库注入
-        param query_dict: 搜索的参数
-        param data: 数据库查询结果
-        '''
-        keys = ("id", "gc_name", "goods_name")
-        for index in query_dict:
-            if index in keys and len(query_dict[index]) != 0:
-                param = {index: query_dict[index]}
-                data = data.filter(**param)
-        return data
-
-    def product_param(self, request):
-        image_key = ("goods_image1", "goods_image2", "goods_image3", "goods_image4", "goods_image5")
-        keys = (
-        "goods_store_price", "goods_show", "gc_id", "goods_name", "goods_body", "goods_price", "goods_story_price",
-        "goods_body")
-        params_dict = {}
-        try:
-            for image_index in image_key:
-                params_dict[image_index] = Images(request.FILES[image_index]).waterMark().save()["waterMark"]
-
-            for key in keys:
-                params_dict[key] = request.POST[key]
-        except:
-            pass
-        return params_dict
-
 
 class ProductController(View):
-    # @method_decorator(login_required(login_url="/user/login/"))
-    # @method_decorator(permission_required("product.goods.show",login_url="/user/login"))
+    @method_decorator(permission_required("products.producs_index", login_url="/user/login"))
     def index(self, request):
         if request.method == "GET":
-            data = Goods.objects.all()
-            try:
-                data = ProductTools().query_index(request.GET, data)
-            except ValueError:
-                raise Http404
+            data = Goods.query_index(dict(request.GET))
             paginator = Paginator(data, 25)
             page = request.GET.get("page")
             try:
@@ -68,7 +32,7 @@ class ProductController(View):
 
             return HttpResponse(index_template.render(RequestContext(request, {"products": products})))
 
-
+    @method_decorator(permission_required("products.producs_update", login_url="/user/login"))
     def update(self, request, id):
         try:
             data = Goods.objects.get(id=id)
@@ -80,12 +44,11 @@ class ProductController(View):
                 RequestContext(request, {"product": data, "goods_class": goods_class_objects_all,
                                          "url": "".join(("/product/update/", id, "/"))})))
         if request.method == "POST":
-            params = ProductTools().product_param(request)
-            data.update_object(**params)
+            data.update_object(request)
             data.save()
         return HttpResponseRedirect("/product/index")
 
-
+    @method_decorator(permission_required("products.producs_show", login_url="/user/login"))
     def show(self, request, id):
         if request.method == "GET":
             try:
@@ -96,24 +59,20 @@ class ProductController(View):
 
         return HttpResponse(show_template.render(RequestContext(request, {"product": data})))
 
-
+    @method_decorator(permission_required("products.producs_delete", login_url="/user/login"))
     def delete(self, request, id):
         if request.method == "GET":
-            if request.method == "GET":
-                data = Goods.objects.get(id=id)
-                data.delete()
-
+            data = Goods.objects.get(id=id)
+            data.delete()
         return HttpResponseRedirect("/product/index")
 
-
+    @method_decorator(permission_required("products.producs_create", login_url="/user/login"))
     def create(self, request):
         if request.method == "GET":
             goods_class_objects_all = GoodsClass.objects.all()
-            print(goods_class_objects_all)
             return HttpResponse(create_template.render(
                 RequestContext(request, {"goods_class": goods_class_objects_all, "url": "/product/create/"})))
         elif request.method == "POST":
-            param = ProductTools().product_param(request)
-            product = Goods.objects.create(**param)
+            product = Goods.form_create(request)
             product.save()
         return HttpResponseRedirect("/product/index")

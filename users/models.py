@@ -6,7 +6,7 @@ user模型
 '''
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, \
-    SiteProfileNotAvailable, UserManager
+    SiteProfileNotAvailable, UserManager, Group
 from django.core import validators
 import re
 from django.utils.translation import ugettext_lazy as _
@@ -14,6 +14,7 @@ import warnings
 from django.core.exceptions import ImproperlyConfigured
 from utils.uuid import uuid
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import Group
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -34,6 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     modified_date = models.DateTimeField(blank=True, null=True)
     date_joined = models.DateTimeField(blank=True, null=True)
     user_parent_id = models.CharField(max_length=32, blank=True, null=True)
+
     secure_phone = models.CharField(max_length=11, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     sex = models.SmallIntegerField(blank=True, null=True)
@@ -63,9 +65,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.id = uuid()
             super(User, self).save(*args, **kwargs)
 
+    def set_goups(self, groups):
+            self.groups.add(Group.objects.get(name=groups))
+
     @classmethod
     def create_user(cls, **data):
-        keys = ("username", "password", "email", "phone", "secure_phone", "email")
+        keys = ("username", "password", "email", "phone", "secure_phone", "email", "sex")
         for key in data.keys():
             if key not in keys:
                 data.pop(key)
@@ -73,6 +78,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                 data[key] = data.get(key, "")[0]
         user = User.objects.create_user(data.pop("username"), str(data.pop("email")), data.pop("password"), **data)
         return user
+
 
     def get_profile(self):
         """
