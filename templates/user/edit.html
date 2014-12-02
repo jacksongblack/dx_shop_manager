@@ -1,6 +1,6 @@
 {% extends 'public/base.html' %}
 {% block centent %}
-    <form method="post" action="{{ url }}">
+    <form method="post" enctype="multipart/form-data"  action="{{ url }}">
         {% csrf_token %}
         <div class="form-group">
             <label for="name">账户:</label>
@@ -31,15 +31,23 @@
         </div>
         <div class="form-group">
            <label for="permision_group">权限组</label>
-             <select name="permision_group" id="sex" class="form-contol" required="required">
+             <select name="permision_group" id="permision_group" class="form-contol" required="required">
                  {% for permision  in permision_group%}
                      <option> {{ permision }}</option>
                  {% endfor %}
              </select>
         </div>
+         <div class="form-group">
+           <label for="avatar">头像</label>
+             <input type="file" name="avatar"id="avatar"/>
+        </div>
         <div class="form-group">
            <label for="email">邮箱</label>
             <input type="email" id="email" name="email" value="{{ user.email }}" placeholder="请输入常用邮箱"required="required">
+        </div>
+        <div class="form-group">
+           <label for="address">邮箱</label>
+            <input type="text" id="address" name="address" value="{{ user.address }}" placeholder="请输入常用邮箱"required="required">
         </div>
         <div class="form-group">
            <input type="submit" value="提交" class="btn btn-success">

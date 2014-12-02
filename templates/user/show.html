@@ -1,0 +1,49 @@
+{% extends 'public/base.html' %}
+{% block title %}馨然之家健康平台|后台管理系统{% endblock %}
+{% block static %}
+{% endblock %}
+{% block centent %}
+<div class="row">
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">名称:</span>
+        <small>{{ user.username }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">电话:</span>
+        <small>{{ user.phone }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">安全电话:</span>
+        <small>{{ user.secure_phone }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">最近一次登录:</span>
+        <small>{{ user.goods_store_price }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">创建时间:</span>
+        <small>{{ user.date_joined }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">编号:</span>
+        <small>{{ user.id }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">邮箱:</span>
+        <small>{{ user.email }}</small>
+    </h3>
+    <h3 class="col-sm-12 col-md-12"><span class="text-uppercase">地址:</span>
+        <small>{{ user.address }}</small>
+    </h3>
+    <div class="row col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-12">
+            <h3>头像:</h3>
+        </div>
+        <div>
+            <img src="{{ user.avatar |safe}}" alt="产品图片" class="img-rounded">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <br/>
+    <br/>
+    <br/>
+    <div class="col-sm-6 col-md-6">
+        <a href="/product/index" class="btn btn-success icon-home">返回</a>
+    </div>
+
+</div>
+{% endblock %}

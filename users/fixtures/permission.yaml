@@ -1,0 +1,6 @@
+model: dx_shop_manager.auth_permission
+pk: 1
+fields:
+       name: "产看商品库存权限"
+       content_type: 12
+       codename: products_index

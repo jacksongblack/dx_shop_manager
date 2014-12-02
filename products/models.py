@@ -1,5 +1,6 @@
 # encoding=utf-8
 from django.db import models
+from plugin.decorators import handler
 
 # Create your models here.
 class GoodsClass(models.Model):
@@ -136,24 +137,14 @@ class Goods(models.Model):
         return super(Goods, self).save(*args, **kwargs)
 
     @classmethod
+    @handler
     def query_index(cls, request):
         '''
         index界面搜索方法,并防止数据库注入
         param request: 搜索的参数
         param data: 数据库查询结果
         '''
-        query_keys = ("id", "gc_name", "goods_name")
-        params = {}
-        query_dict = dict(request.GET)
-        for key in query_keys:
-            if key in query_dict.keys() and len(query_dict[key][0]) != 0:
-                params[key] = query_dict[key][0]
-
-        if params:
-            data = cls.objects.filter(**params)
-        else:
-            data = cls.objects.all()
-        return data
+        return ("id", "gc_name", "goods_name")
 
     @classmethod
     def form_create(cls, request):
