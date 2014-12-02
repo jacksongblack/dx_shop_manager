@@ -20,7 +20,7 @@ class ProductController(View):
     @method_decorator(permission_required("products.producs_index", login_url="/user/login"))
     def index(self, request):
         if request.method == "GET":
-            data = Goods.query_index(dict(request.GET))
+            data = Goods.query_index(request)
             paginator = Paginator(data, 25)
             page = request.GET.get("page")
             try:

@@ -136,17 +136,19 @@ class Goods(models.Model):
         return super(Goods, self).save(*args, **kwargs)
 
     @classmethod
-    def query_index(cls, query_dict):
+    def query_index(cls, request):
         '''
         index界面搜索方法,并防止数据库注入
-        param query_dict: 搜索的参数
+        param request: 搜索的参数
         param data: 数据库查询结果
         '''
         query_keys = ("id", "gc_name", "goods_name")
         params = {}
-        for key in query_dict:
-            if key in query_keys and key in query_dict.keys() and len(query_dict[key][0]) != 0:
+        query_dict = dict(request.GET)
+        for key in query_keys:
+            if key in query_dict.keys() and len(query_dict[key][0]) != 0:
                 params[key] = query_dict[key][0]
+
         if params:
             data = cls.objects.filter(**params)
         else:
