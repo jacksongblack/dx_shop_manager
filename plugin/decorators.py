@@ -1,4 +1,6 @@
-def index_params_handler(request):
+def handler(func):
+    def index_params_handler(cls,request):
+        query_keys = func(cls,request)
         params = {}
         query_dict = dict(request.GET)
         for key in query_keys:
@@ -9,3 +11,6 @@ def index_params_handler(request):
             data = cls.objects.filter(**params)
         else:
             data = cls.objects.all()
+        return data
+
+    return index_params_handler
