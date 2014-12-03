@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django_cron',
     'south',
     'products',
+    'categories',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -4,7 +4,8 @@ from django.views.generic.base import View
 from django.template.context import RequestContext
 from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect, Http404
-from products.models import Goods, GoodsClass
+from categories.models import GoodsClass
+
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
