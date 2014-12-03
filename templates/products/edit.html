@@ -37,18 +37,18 @@
 
     <div class="form-group">
         <label for="price">内部价格</label>
-        <input type="number" name="goods_price" id="price" value="{{ product.goods_price }}" required="required"/>
+        <input type="number" name="goods_price" id="price" pattern=".{6,10}"  min="0" value="{{ product.goods_price }}" required="required"/>
     </div>
 
     <div class="form-group">
         <label for="price">显示编码</label>
-        <input type="number" name="goods_show" id="price" value="{{ product.goods_show }}" required="required"/>
+        <input type="number" name="goods_show" id="price" pattern=".{6,10}" maxlength="10" min="0" value="{{ product.goods_show }}" required="required"/>
     </div>
 
 
     <div class="form-group">
         <label for="price">店面价格</label>
-        <input type="number" name="goods_store_price" id="price" value="{{ product.goods_store_price }}"
+        <input type="number" name="goods_store_price" id="price" pattern=".{6,10}" min="0" value="{{ product.goods_store_price }}"
                required="required"/>
     </div>
 
@@ -91,7 +91,8 @@
     </div>
 
     <div class="form-group">
-        <input type="submit"  value="提交"/>
+        <input type="submit"  class="btn btn-danger" value="提交"/>
+        <a class="btn btn-success" href="/product/index">返回</a>
     </div>
 </form>
 <script type="text/javascript">
