@@ -1,13 +1,16 @@
 {% extends 'public/base.html' %}
+
 {% block title %}馨然之家健康平台|后台管理系统{% endblock %}
 {% block static %}
 {% endblock %}
 {% block centent %}
+
     <table class="table table-hover">
         <thead>
         <tr>
             <th>编号</th>
             <th>名称</th>
+            <th>下一级目录</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -17,11 +20,20 @@
                 <td>{{ category.id }}</td>
                 <td>{{ category.gc_name }}</td>
                 <td>
-                    <a href="/categories/show/{{ category.id }}" class="btn btn-success">查看</a>
+                <select>
+                    {% load nodes_filter %}
+                    {% autoescape off %}
+                        {{ category|get_nodes|safe }}
+                    {% endautoescape %}
+                </select>
+                </td>
+
+                <td>
                     <a href="/categories/delete/{{ category.id }}" class="btn btn-danger">删除</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <a class="btn btn-success" href="/categories/create">创建种类</a>
 {% endblock %}

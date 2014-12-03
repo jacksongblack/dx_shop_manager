@@ -19,13 +19,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">馨然之家后台管理系统</a>
+                <a class="navbar-brand" href="/user/index">馨然之家后台管理系统</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     {% if user %}
                     {% if  user.is_authenticated %}
-                    <li><h4 class="success" style="color:white;">欢迎{{  user.get_username }}使用</h4></li>
+                    <li><a class="" href="/user/show/{{ user.id }}">欢迎{{  user.get_username }}使用</a></li>
                     <li><a href="/user/logout/">退出</a></li>
                     {% endif %}
                     {% endif %}
@@ -37,11 +37,9 @@
             <div class="row">
                 <div class="col-sm-3 col-md-2 sidebar">
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="active"><a href="/product/index">产看全部产品</a></li>   
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">Practice Editor </a></li> 
-                        <li><a href="#">Gallery</a></li> 
-                        <li><a href="#">Contact</a></li> 
+                        <li><a href="/product/index">产品管理</a></li>
+                        <li><a href="/user/index">用户管理</a></li>
+                        <li><a href="/categories/index">产品种类管理</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-9  col-md-10  main">

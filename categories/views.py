@@ -18,21 +18,22 @@ category_show_tempalte = loader.get_template("category/show.html")
 
 
 class CategoriesController(View):
+    @method_decorator(permission_required("categories.category_permissions",login_url="/user/login"))
     def index(self, request):
-        data = GoodsClass.objects.all()
+        data = GoodsClass.objects.filter(gc_parent_id=None)
         return HttpResponse(categories_index_tempalte.render(RequestContext(request, {"categories": data})))
-
+    @method_decorator(permission_required("categories.category_permissions",login_url="/user/login"))
     def create(self, request):
         if request.method == "GET":
-            goods_class_objects_all = GoodsClass.objects.all()
+            goods_class_objects_all = GoodsClass.objects.filter(gc_parent_id=None)
             return HttpResponse(category_edit_tempalte.render(
-                RequestContext(request, {"goods_class": goods_class_objects_all, "url": "/categories/create/"})))
+                RequestContext(request, {"categories": goods_class_objects_all, "url": "/categories/create/"})))
         elif request.method == "POST":
             params = dict(request.POST)
             product = GoodsClass.create(**params)
             product.save()
         return HttpResponseRedirect("/categories/index")
-
+    @method_decorator(permission_required("categories.category_permissions",login_url="/user/login"))
     def delete(self, request, id):
         category = GoodsClass.objects.get(id=id)
         category.delete()

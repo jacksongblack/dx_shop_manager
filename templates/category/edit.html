@@ -1,22 +1,31 @@
 {% extends 'public/base.html' %}
 {% block title %}馨然之家健康平台|后台管理系统{% endblock %}
 {% block static %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}UE/third-party/SyntaxHighlighter/shCoreDefault.css">
-<script type="text/javascript" src="{{ STATIC_URL }}UE/third-party/SyntaxHighlighter/shCore.js"></script>
-<script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/ueditor.config.js"></script>
-<script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/ueditor.all.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}UE/third-party/SyntaxHighlighter/shCoreDefault.css">
+    <script type="text/javascript" src="{{ STATIC_URL }}UE/third-party/SyntaxHighlighter/shCore.js"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/ueditor.all.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ STATIC_URL }}UE/lang/zh-cn/zh-cn.js"></script>
 {% endblock %}
 {% block centent %}
-<form enctype="multipart/form-data" method="post" action="{{ url }}" role="form" style="margin: 50px auto">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="price">类型名称</label>
-        <input type="text" name="gc_name" id="price" value="{{ product.id }}"
-               required="required"/>
-    </div>
-    <div class="form-group">
-        <input type="submit"   value="提交" class="btn btn-success"/>
-    </div>
-</form>
+    <form enctype="multipart/form-data" method="post" action="{{ url }}" role="form" style="margin: 50px auto">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="price">类型名称</label>
+            <input type="text" name="gc_name" id="price" value="{{ product.id }}"
+                   required="required"/>
+        </div>
+        <div class="form-group">
+            <label for="parent">上级类型</label>
+            <select id="gc_parent" name="gc_parent_id">
+                <option value="">创建一级目录</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.gc_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="提交" class="btn btn-success"/>
+        </div>
+    </form>
 {% endblock %}

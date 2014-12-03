@@ -5,7 +5,7 @@
 {% block centent %}
     <form class="form-inline row" rol="form" action="/product/index/" mothod="get">
         <div class="row">
-            <div class="col-md-1 col-sm-1 ">
+            <div class="col-md-2 col-sm-2 ">
                 <div class="input-group">
                     <span class="input-group-addon">编号</span>
                     <input type="number" class="form-control" id="number" name="id" placeholder="请输入编号">
@@ -32,33 +32,11 @@
                            placeholder="请输入销售量">
                 </div>
             </div>
-            <div class="col-md-1 col-sm-1 ">
+            <div class="col-md-2 col-sm-2 ">
                 <div class="input-group">
                     <span class="input-group-addon">库存</span>
                     <input type="number" class="form-control" id="stock_number" name="stock_number"
                            placeholder="请输入库存">
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2 ">
-                <div class="input-group">
-                    <span class="input-group-addon">内部价格</span>
-                    <input type="number" class="form-control " id="goods_price" name="goods_price"
-                           placeholder="请输入内部价格">
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2 ">
-                <div class="input-group">
-                    <span class="input-group-addon">店面价格</span>
-                    <input type="number" class="form-control " id="goods_store_price"
-                           name="goods_store_price"
-                           placeholder="请输入店面价格">
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2 ">
-                <div class="input-group">
-                    <span class="input-group-addon">内部价格</span>
-                    <input type="number" class="form-control " id="goods_price" name="goods_price"
-                           placeholder="请输入内部价格">
                 </div>
             </div>
 
@@ -114,4 +92,5 @@
         {% endif %}
     </span>
     </div>
+    <a class="btn btn-danger" href="/products/create">创建商品</a>
 {% endblock %}

@@ -5,40 +5,40 @@
 {% block centent %}
     <form class="form-inline row" rol="form" action="/user/index/" mothod="get">
         <div class="row">
-            <div class="col-md-1 col-sm-1 ">
+            <div class="col-md-2 col-sm-2 ">
                 <div class="input-group">
-                    <span class="input-group-addon">编号</span>
-                    <input type="number" class="form-control" id="username" name="username" placeholder="请输入姓名">
+                    <span class="input-group-addon">姓名</span>
+                    <input type="text" class="form-control" name="username" placeholder="请输入姓名">
                 </div>
             </div>
             <div class="col-md-2 col-sm-2 ">
                 <div class="input-group">
-                    <span class="input-group-addon">权限组</span>
-                    <select class="form-control">
-                       {% for category in categories %}
-                         <option>{{ category }}</option>
-                       {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-1 col-sm-1 ">
-                <div class="input-group">
-                    <span class="input-group-addon">库存</span>
-                    <input type="number" class="form-control" id="stock_number" name="stock_number"
-                           placeholder="请输入库存">
+                    <span class="input-group-addon">邮箱</span>
+                    <input type="text" class="form-control" id="stock_number" name="email"
+                           placeholder="请输入邮箱">
                 </div>
             </div>
             <div class="col-md-2 col-sm-2 ">
                 <div class="input-group">
-                    <span class="input-group-addon">内部价格</span>
-                    <input type="number" class="form-control " id="goods_price" name="goods_price"
+                    <span class="input-group-addon">电话</span>
+                    <input type="number" class="form-control " id="goods_price" name="phone"
                            placeholder="请输入内部价格">
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-2 ">
+                <div class="input-group">
+                    <span class="input-group-addon">性别</span>
+                    <select class="form-control" name="sex">
+                        <option value="">请选择</option>
+                        <option value="1">男</option>
+                        <option value="0">女</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group col-md-1 col-sm-1">
                 <input type="submit" class="form-control btn btn-success" value="查询" style="width: 100%">
             </div>
-            <a href="/product/index" class="btn btn-success">清除搜索结果</a>
+            <a href="/user/index" class="btn btn-success">清除搜索结果</a>
         </div>
     </form>
     <table class="table table-hover">

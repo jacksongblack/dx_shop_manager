@@ -94,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         param query_dict: 搜索的参数
         param data: 数据库查询结果
         '''
-        return ("username", "phone", "secure_phone", "sex")
+        return ("id","username", "phone", "secure_phone", "sex")
 
     def get_profile(self):
         """
