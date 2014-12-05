@@ -1,6 +1,6 @@
 def handler(func):
-    def index_params_handler(cls,request):
-        query_keys = func(cls,request)
+    def index_params_handler(cls, request):
+        query_keys = func(cls, request)
         params = {}
         query_dict = dict(request.GET)
         for key in query_keys:

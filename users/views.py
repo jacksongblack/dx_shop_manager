@@ -14,7 +14,9 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template import loader
-from plugin.tool import get_users_groups_to_string
+from plugin.cache import CacheFactory
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 log = logging.getLogger("user.logger")
 index_template = loader.get_template("user/index.html")
@@ -45,9 +47,18 @@ def login(request):
 
 
 class UserControll(View):
+    def get_users_groups_to_string(self, users=None):
+        for user in users:
+            group_str = ''
+            for group in user.groups.all():
+                group_str += group.name
+            user.groups_str = group_str
+        return users
+
     def index(self, request):
         if request.method == "GET":
-            data = get_users_groups_to_string(User.query_index(request))
+            data = CacheFactory().index_cache(request, self.get_users_groups_to_string,
+                                              **{"users": User.query_index(request)})
             paginator = Paginator(data, 25)
             page = request.GET.get("page")
             try:
@@ -76,6 +87,7 @@ class UserControll(View):
                                       {"url": "/user/create/", "permision_group": permision, "user": user},
                                       RequestContext(request))
 
+    @method_decorator(cache_page(60 * 30))
     def show(self, request, id):
         user = User.objects.get(id=id)
         return render_to_response("user/show.html", {"user": user}, RequestContext(request))

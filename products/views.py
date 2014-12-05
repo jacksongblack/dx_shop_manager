@@ -9,6 +9,7 @@ from products.models import Goods, GoodsClass
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
+from plugin.cache import CacheFactory
 
 # Create your views here.
 create_template = loader.get_template("products/edit.html")
@@ -20,7 +21,7 @@ class ProductController(View):
     @method_decorator(permission_required("products.producs_index", login_url="/user/login"))
     def index(self, request):
         if request.method == "GET":
-            data = Goods.query_index(request)
+            data = CacheFactory().index_cache(request,Goods.query_index)
             paginator = Paginator(data, 25)
             page = request.GET.get("page")
             try:
@@ -53,7 +54,7 @@ class ProductController(View):
         if request.method == "GET":
             try:
                 data = Goods.objects.get(id=id)
-            except ValueError:
+            except :
 
                 raise Http404
 

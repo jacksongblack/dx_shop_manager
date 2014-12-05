@@ -6,9 +6,9 @@ from django.http.response import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from categories.models import GoodsClass
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
+from plugin.cache import CacheFactory
 
 # Create your views here.
 
@@ -18,11 +18,12 @@ category_show_tempalte = loader.get_template("category/show.html")
 
 
 class CategoriesController(View):
-    @method_decorator(permission_required("categories.category_permissions",login_url="/user/login"))
+    @method_decorator(permission_required("categories.category_permissions", login_url="/user/login"))
     def index(self, request):
-        data = GoodsClass.objects.filter(gc_parent_id=None)
+        data = CacheFactory().index_cache(request, GoodsClass.objects.filter, **{"gc_parent_id":None})
         return HttpResponse(categories_index_tempalte.render(RequestContext(request, {"categories": data})))
-    @method_decorator(permission_required("categories.category_permissions",login_url="/user/login"))
+
+    @method_decorator(permission_required("categories.category_permissions", login_url="/user/login"))
     def create(self, request):
         if request.method == "GET":
             goods_class_objects_all = GoodsClass.objects.filter(gc_parent_id=None)
@@ -33,7 +34,8 @@ class CategoriesController(View):
             product = GoodsClass.create(**params)
             product.save()
         return HttpResponseRedirect("/categories/index")
-    @method_decorator(permission_required("categories.category_permissions",login_url="/user/login"))
+
+    @method_decorator(permission_required("categories.category_permissions", login_url="/user/login"))
     def delete(self, request, id):
         category = GoodsClass.objects.get(id=id)
         category.delete()
